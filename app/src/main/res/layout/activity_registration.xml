@@ -5,7 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient2new"
+    android:fadeScrollbars="false"
+    android:isScrollContainer="false"
     android:padding="2dp"
+    android:scrollbarAlwaysDrawHorizontalTrack="false"
+    android:scrollbarAlwaysDrawVerticalTrack="false"
     tools:context=".Registration">
 
     <TextView
@@ -25,6 +29,7 @@
 
     <ScrollView
         android:id="@+id/scrollView2"
+        style="@android:style/Widget.Material.ScrollView"
         android:layout_width="398dp"
         android:layout_height="745dp"
         android:layout_marginBottom="1dp"
@@ -64,7 +69,7 @@
                     android:textStyle="bold" />
 
                 <AutoCompleteTextView
-                    android:id="@+id/autoCompleteTextView"
+                    android:id="@+id/animalType"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -89,7 +94,7 @@
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/spinner2"
+                    android:id="@+id/genderSpinner"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
@@ -111,7 +116,7 @@
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/spinner22"
+                    android:id="@+id/conditionSpinner"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
@@ -133,7 +138,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/editTextTextMultiLine"
+                    android:id="@+id/descriptionText"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -161,7 +166,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/editTextTextMultiLjine"
+                    android:id="@+id/address"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -189,7 +194,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/ediwtTextTextM2ultiLine"
+                    android:id="@+id/city"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -199,7 +204,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/cattleImage"
+                android:id="@+id/AnimalImage"
                 android:layout_width="365dp"
                 android:layout_height="187dp"
                 android:layout_margin="8dp"
@@ -236,7 +241,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/editTextTextM2ultiLine"
+                    android:id="@+id/senderName"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -261,18 +266,18 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/editTextsTextM2ultiLine"
+                    android:id="@+id/phoneNumber"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="+91XXXXXXXX"
+                    android:hint="+91XXXXXXXXXX"
                     android:inputType="number"
                     android:textAlignment="center" />
 
             </LinearLayout>
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/sendOTPBtn"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="132dp"
@@ -299,7 +304,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/editText1sTextM2ultiLine"
+                    android:id="@+id/enterOTPBox"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -310,7 +315,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/validateOTPBtn"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="120dp"
@@ -321,7 +326,7 @@
                 app:cornerRadius="20dp" />
 
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/SubmitBtn"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="95dp"

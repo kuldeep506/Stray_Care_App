@@ -25,7 +25,7 @@ public class Dashboard extends AppCompatActivity {
         Button registration =findViewById(R.id.registrationBtn);
 
 
-
+        /** registration button to open registration page*/
         registration.setOnClickListener(v -> {
             Intent intent=new Intent(getApplicationContext(),Registration.class);
             startActivity(intent);
