@@ -68,7 +68,7 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="hint: Dog"
+                    android:text="Hint: Dog"
                     android:textAlignment="center"
                     android:textColor="#8A353333" />
             </LinearLayout>
@@ -200,8 +200,9 @@
 
             <ImageView
                 android:id="@+id/cattleImage"
-                android:layout_width="match_parent"
-                android:layout_height="171dp"
+                android:layout_width="365dp"
+                android:layout_height="187dp"
+                android:layout_margin="8dp"
                 android:paddingBottom="2dp"
                 tools:srcCompat="@tools:sample/avatars" />
 
@@ -212,8 +213,11 @@
                 android:layout_marginStart="100dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
+                android:backgroundTint="#A10303"
                 android:paddingBottom="4dp"
-                android:text="Capture Image" />
+                android:shadowRadius="@dimen/material_emphasis_high_type"
+                android:text="Capture Image"
+                app:cornerRadius="20dp" />
 
 
             <LinearLayout
@@ -271,11 +275,13 @@
                 android:id="@+id/button3"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="130dp"
+                android:layout_marginStart="132dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
+                android:backgroundTint="#A10303"
                 android:paddingBottom="2dp"
-                android:text="Send OTP" />
+                android:text="Send OTP"
+                app:cornerRadius="20dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -310,7 +316,9 @@
                 android:layout_marginStart="120dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
-                android:text="Validate OTP" />
+                android:backgroundTint="#A10303"
+                android:text="Validate OTP"
+                app:cornerRadius="20dp" />
 
             <Button
                 android:id="@+id/button5"
@@ -319,7 +327,11 @@
                 android:layout_marginStart="95dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
-                android:text="Submit" />
+                android:backgroundTint="#52DD58"
+                android:text="Submit"
+                android:textColor="#0E0D0D"
+                android:textSize="18sp"
+                app:cornerRadius="4dp" />
 
         </LinearLayout>
 
