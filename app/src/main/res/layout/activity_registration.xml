@@ -145,8 +145,7 @@
                     android:ems="10"
                     android:gravity="start|top"
                     android:hint="Condition Overview "
-                    android:inputType="textMultiLine"
-                    android:textAlignment="center" />
+                    android:inputType="textMultiLine"/>
 
             </LinearLayout>
 
@@ -173,8 +172,7 @@
                     android:ems="10"
                     android:gravity="start|top"
                     android:hint="Last Seen Address"
-                    android:inputType="textMultiLine"
-                    android:textAlignment="center" />
+                    android:inputType="textMultiLine"/>
 
             </LinearLayout>
 

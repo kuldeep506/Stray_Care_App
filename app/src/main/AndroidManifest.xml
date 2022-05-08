@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StrayCareApp">
         <activity android:name=".Dashboard"></activity>
-        <activity android:name=".Registration" />
+        <activity android:name=".Registration" android:windowSoftInputMode="adjustPan" />
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
