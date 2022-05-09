@@ -11,9 +11,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.Objects;
 
 public class Dashboard extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +29,12 @@ public class Dashboard extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar())
                 .setBackgroundDrawable(getDrawable(R.color.taskbar));
 
+
+
+        /** Assigning variables with input fields Ids*/
         Button registration =findViewById(R.id.registrationBtn);
+
+
 
 
         /** registration button to open registration page*/
