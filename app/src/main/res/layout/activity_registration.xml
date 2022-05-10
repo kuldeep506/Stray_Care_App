@@ -204,9 +204,11 @@
 
             <ImageView
                 android:id="@+id/AnimalImage"
-                android:layout_width="365dp"
-                android:layout_height="187dp"
-                android:layout_margin="8dp"
+                android:layout_width="364dp"
+                android:layout_height="183dp"
+                android:layout_margin="7dp"
+                android:adjustViewBounds="false"
+                android:baselineAlignBottom="false"
                 android:paddingBottom="2dp"
                 tools:srcCompat="@tools:sample/avatars" />
 
