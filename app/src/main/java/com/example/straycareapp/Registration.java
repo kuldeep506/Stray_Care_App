@@ -12,6 +12,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -75,6 +76,10 @@ public class Registration extends AppCompatActivity {
         Button validateOTP = findViewById(R.id.validateOTPBtn);
         Button finalSubmit = findViewById(R.id.SubmitBtn);
 
+        LinearLayout senderNameLayout=findViewById(R.id.layout1);
+        LinearLayout phoneNumberLayout=findViewById(R.id.layout2);
+        LinearLayout enterLayout=findViewById(R.id.layout3);
+
         /** EditTexts*/
         AutoCompleteTextView animalType = findViewById(R.id.animalType);
         EditText description = findViewById(R.id.descriptionText);
@@ -100,35 +105,51 @@ public class Registration extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, conditionArr);
         condition.setAdapter(conditionAdapter);
 
+        /** Hiding Views to unhide them during specific condition*/
+        animalImage.setVisibility(View.GONE);
+        sendOTP.setVisibility(View.GONE);
+        senderNameLayout.setVisibility(View.INVISIBLE);
+        phoneNumberLayout.setVisibility(View.INVISIBLE);
+        enterLayout.setVisibility(View.INVISIBLE);
+        validateOTP.setVisibility(View.GONE);
+        finalSubmit.setVisibility(View.GONE);
+
+
 
         /** Button to Send OTP */
         sendOTP.setOnClickListener(v -> {
-            PhoneAuthOptions options =
-                    PhoneAuthOptions.newBuilder(auth)
-                            .setPhoneNumber(phoneNumber.getText().toString().trim())       // Phone number to verify
-                            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                            .setActivity(this)                 // Activity (for callback binding)
-                            .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                                @Override
-                                public void onVerificationCompleted(@NonNull @NotNull PhoneAuthCredential phoneAuthCredential) {
-                                    Toast.makeText(getApplicationContext(), "OTP Verified", Toast.LENGTH_LONG).show();
-                                }
+            if(TextUtils.isEmpty(senderName.getText().toString())){
+                senderName.setError("Name Can't be Empty");
+            }else if(phoneNumber.getText().toString().trim().length()!=10){
+                phoneNumber.setError("Input Valid Phone number");
+            }else {
+                PhoneAuthOptions options =
+                        PhoneAuthOptions.newBuilder(auth)
+                                .setPhoneNumber("+91"+phoneNumber.getText().toString().trim())       // Phone number to verify
+                                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                                .setActivity(this)                 // Activity (for callback binding)
+                                .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                                    @Override
+                                    public void onVerificationCompleted(@NonNull @NotNull PhoneAuthCredential phoneAuthCredential) {
+                                        Toast.makeText(getApplicationContext(), "OTP Verified", Toast.LENGTH_LONG).show();
+                                    }
 
-                                @Override
-                                public void onVerificationFailed(@NonNull @NotNull FirebaseException e) {
-                                    Toast.makeText(getApplicationContext(), "OTP Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                    @Override
+                                    public void onVerificationFailed(@NonNull @NotNull FirebaseException e) {
+                                        Toast.makeText(getApplicationContext(), "OTP Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
 
-                                }
+                                    }
 
-                                @Override
-                                public void onCodeSent(@NonNull @NotNull String s, @NonNull @NotNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                                    OTPByFirebase = s;
-                                    super.onCodeSent(s, forceResendingToken);
-                                    Toast.makeText(getApplicationContext(), "OTP Sent", Toast.LENGTH_LONG).show();
-                                }
-                            })
-                            .build();
-            PhoneAuthProvider.verifyPhoneNumber(options);
+                                    @Override
+                                    public void onCodeSent(@NonNull @NotNull String s, @NonNull @NotNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                                        OTPByFirebase = s;
+                                        super.onCodeSent(s, forceResendingToken);
+                                        Toast.makeText(getApplicationContext(), "OTP Sent", Toast.LENGTH_LONG).show();
+                                    }
+                                })
+                                .build();
+                PhoneAuthProvider.verifyPhoneNumber(options);
+            }
 
         });
 
@@ -151,8 +172,6 @@ public class Registration extends AppCompatActivity {
                     description.setError("Field can't be Empty");
                 } else if (TextUtils.isEmpty(address.getText().toString().trim())) {
                     address.setError("Field can't be Empty");
-//                } else if (TextUtils.isEmpty(senderName.getText().toString().trim())) {
-//                    senderName.setError("Field can't be Empty");
                 }else if (TextUtils.isEmpty(city.getText().toString().trim())) {
                     city.setError("Field can't be Empty");
                 }
@@ -168,6 +187,7 @@ public class Registration extends AppCompatActivity {
 
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    animalImage.setVisibility(View.VISIBLE);
                     startActivityForResult(intent, 1);
                 } catch (IOException e) {
                     e.printStackTrace();
