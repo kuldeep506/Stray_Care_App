@@ -1,11 +1,15 @@
 package com.example.straycareapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -21,8 +25,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -33,6 +40,7 @@ import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
@@ -44,12 +52,23 @@ public class Registration extends AppCompatActivity {
     ImageView animalImage;
     String[] genderArr = {"Male", "Female", "Unknown"};
     String[] conditionArr = {"Normal", "Mild", "Severe"};
+    String[] animalTypeArr = {"Dog","Cat", "Cow", "Buffalo", "Bull", "Donkey", "Ox", "Horse", "Elephant", "Pig", "Sheep", "goat"};
     /***/
     FirebaseFirestore db;
     CollectionReference collectionReference;
     FirebaseStorage storage;
     StorageReference imageStorageReference;
     FirebaseAuth auth;
+
+    /**
+     * Views which hide and unhide on certain condition
+     */
+    LinearLayout senderNameLayout;
+    LinearLayout phoneNumberLayout;
+    LinearLayout enterLayout;
+    Button validateOTP;
+    Button sendOTP;
+
     /**
      * Private Useful fileds
      */
@@ -70,15 +89,17 @@ public class Registration extends AppCompatActivity {
         imageStorageReference = storage.getReference();
         auth = FirebaseAuth.getInstance();
 
+        DetailModel obj=new DetailModel();
+
         /**Buttons*/
         Button captureImage = findViewById(R.id.imageCaptureBtn);
-        Button sendOTP = findViewById(R.id.sendOTPBtn);
-        Button validateOTP = findViewById(R.id.validateOTPBtn);
+        sendOTP = findViewById(R.id.sendOTPBtn);
+        validateOTP = findViewById(R.id.validateOTPBtn);
         Button finalSubmit = findViewById(R.id.SubmitBtn);
 
-        LinearLayout senderNameLayout=findViewById(R.id.layout1);
-        LinearLayout phoneNumberLayout=findViewById(R.id.layout2);
-        LinearLayout enterLayout=findViewById(R.id.layout3);
+        senderNameLayout = findViewById(R.id.layout1);
+        phoneNumberLayout = findViewById(R.id.layout2);
+        enterLayout = findViewById(R.id.layout3);
 
         /** EditTexts*/
         AutoCompleteTextView animalType = findViewById(R.id.animalType);
@@ -105,6 +126,10 @@ public class Registration extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, conditionArr);
         condition.setAdapter(conditionAdapter);
 
+        ArrayAdapter<String> animalTypeAdapter = new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_list_item_1, animalTypeArr);
+        animalType.setAdapter(animalTypeAdapter);
+
         /** Hiding Views to unhide them during specific condition*/
         animalImage.setVisibility(View.GONE);
         sendOTP.setVisibility(View.GONE);
@@ -115,67 +140,20 @@ public class Registration extends AppCompatActivity {
         finalSubmit.setVisibility(View.GONE);
 
 
-
-        /** Button to Send OTP */
-        sendOTP.setOnClickListener(v -> {
-            if(TextUtils.isEmpty(senderName.getText().toString())){
-                senderName.setError("Name Can't be Empty");
-            }else if(phoneNumber.getText().toString().trim().length()!=10){
-                phoneNumber.setError("Input Valid Phone number");
-            }else {
-                PhoneAuthOptions options =
-                        PhoneAuthOptions.newBuilder(auth)
-                                .setPhoneNumber("+91"+phoneNumber.getText().toString().trim())       // Phone number to verify
-                                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                                .setActivity(this)                 // Activity (for callback binding)
-                                .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                                    @Override
-                                    public void onVerificationCompleted(@NonNull @NotNull PhoneAuthCredential phoneAuthCredential) {
-                                        Toast.makeText(getApplicationContext(), "OTP Verified", Toast.LENGTH_LONG).show();
-                                    }
-
-                                    @Override
-                                    public void onVerificationFailed(@NonNull @NotNull FirebaseException e) {
-                                        Toast.makeText(getApplicationContext(), "OTP Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
-
-                                    }
-
-                                    @Override
-                                    public void onCodeSent(@NonNull @NotNull String s, @NonNull @NotNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                                        OTPByFirebase = s;
-                                        super.onCodeSent(s, forceResendingToken);
-                                        Toast.makeText(getApplicationContext(), "OTP Sent", Toast.LENGTH_LONG).show();
-                                    }
-                                })
-                                .build();
-                PhoneAuthProvider.verifyPhoneNumber(options);
-            }
-
-        });
-
-        /** verify OTP Btn*/
-        validateOTP.setOnClickListener(v -> {
-            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(OTPByFirebase, enterOTPBox.getText().toString());
-
-            FirebaseAuth.getInstance().signInWithCredential(credential)
-
-                    .addOnCompleteListener(task -> Toast.makeText(getApplicationContext(), "Sign In", Toast.LENGTH_LONG).show())
-
-                    .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Sign In Fail", Toast.LENGTH_LONG).show());
-        });
-
         /** Button to Capture Image*/
         captureImage.setOnClickListener(v -> {
-                if (TextUtils.isEmpty(animalType.getText().toString().trim())) {
-                    animalType.setError("Field can't be Empty");
-                } else if (TextUtils.isEmpty(description.getText().toString().trim())) {
-                    description.setError("Field can't be Empty");
-                } else if (TextUtils.isEmpty(address.getText().toString().trim())) {
-                    address.setError("Field can't be Empty");
-                }else if (TextUtils.isEmpty(city.getText().toString().trim())) {
-                    city.setError("Field can't be Empty");
-                }
-                else {
+            if (TextUtils.isEmpty(animalType.getText().toString().trim())) {
+                animalType.setError("Field can't be Empty");
+            } else if (TextUtils.isEmpty(description.getText().toString().trim())) {
+                description.setError("Field can't be Empty");
+            } else if (TextUtils.isEmpty(address.getText().toString().trim())) {
+                address.setError("Field can't be Empty");
+            } else if (TextUtils.isEmpty(city.getText().toString().trim())) {
+                city.setError("Field can't be Empty");
+            } else {
+                senderNameLayout.setVisibility(View.VISIBLE);
+                phoneNumberLayout.setVisibility(View.VISIBLE);
+                sendOTP.setVisibility(View.VISIBLE);
                 String fileName = "animalPhoto";
                 File storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
                 try {
@@ -195,12 +173,118 @@ public class Registration extends AppCompatActivity {
             }
         });
 
+        /** Button to Send OTP */
+        sendOTP.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(senderName.getText().toString())) {
+                senderName.setError("Name Can't be Empty");
+            } else if (phoneNumber.getText().toString().trim().length() != 10) {
+                phoneNumber.setError("Input Valid Phone number");
+            } else {
+                PhoneAuthOptions options =
+                        PhoneAuthOptions.newBuilder(auth)
+                                .setPhoneNumber("+91" + phoneNumber.getText().toString().trim())       // Phone number to verify
+                                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                                .setActivity(this)                 // Activity (for callback binding)
+                                .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                                    @Override
+                                    public void onVerificationCompleted(@NonNull @NotNull PhoneAuthCredential phoneAuthCredential) {
+                                    }
+
+                                    @Override
+                                    public void onVerificationFailed(@NonNull @NotNull FirebaseException e) {
+                                        Toast.makeText(getApplicationContext(), "Failed! Some error occurred" + e.getMessage(), Toast.LENGTH_LONG).show();
+
+                                    }
+
+                                    @Override
+                                    public void onCodeSent(@NonNull @NotNull String s, @NonNull @NotNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                                        OTPByFirebase = s;
+                                        super.onCodeSent(s, forceResendingToken);
+                                        Toast.makeText(getApplicationContext(), "OTP Sent Successfully", Toast.LENGTH_LONG).show();
+                                        enterLayout.setVisibility(View.VISIBLE);
+                                        validateOTP.setVisibility(View.VISIBLE);
+                                        sendOTP.setText("Resend OTP");
+                                        sendOTP.setTextSize(13);
+                                    }
+                                })
+                                .build();
+                PhoneAuthProvider.verifyPhoneNumber(options);
+            }
+
+        });
+
+        /** verify OTP Btn*/
+        validateOTP.setOnClickListener(v -> {
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(OTPByFirebase, enterOTPBox.getText().toString());
+            auth.signInWithCredential(credential)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Toast.makeText(getApplicationContext(), "OTP Verified", Toast.LENGTH_LONG).show();
+                            // Setting data from fields to object
+                            String AnimalType = animalType.getText().toString().trim();
+                            String Gender = gender.getSelectedItem().toString();
+                            String Condition = condition.getSelectedItem().toString();
+                            String Description = description.getText().toString().trim();
+                            String Address = address.getText().toString().trim();
+                            String City = city.getText().toString().trim();
+                            String SenderName=senderName.getText().toString().trim();
+                            String Phone=phoneNumber.getText().toString().trim();
+
+                            String filename = "image" + Timestamp.now().getSeconds();
+                            imageStorageReference.child("Requests")
+                                    .child(filename)
+                                    .putFile(imageUri).addOnSuccessListener((task2 -> {
+                                imageStorageReference.child("Requests").child(filename).getDownloadUrl()
+                                        .addOnSuccessListener(uri -> {
+                                                    String imageUrl = uri.toString();
+                                                    obj.setAnimalType(AnimalType);
+                                                    obj.setGender(Gender);
+                                                    obj.setCondition(Condition);
+                                                    obj.setDescription(Description);
+                                                    obj.setAddress(Address);
+                                                    obj.setCity(City);
+                                                    obj.setSenderName(SenderName);
+                                                    obj.setPhoneNumber(Phone);
+                                                    obj.setImageUri(imageUrl);
+                                                }
+                                        ).addOnFailureListener(
+                                        e -> Toast.makeText(getApplicationContext(),"Some Error Occurred",Toast.LENGTH_LONG).show());
+                            }));
+                            // Update UI
+                            validateOTP.setVisibility(View.GONE);
+                            enterLayout.setVisibility(View.GONE);
+                            sendOTP.setVisibility(View.GONE);
+                            finalSubmit.setVisibility(View.VISIBLE);
+                        } else {
+                            // Sign in failed, display a message and update the UI
+                            finalSubmit.setVisibility(View.GONE);
+//                            Toast.makeText(getApplicationContext(), "Failed" + task.getException(), Toast.LENGTH_LONG).show();
+                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                // The verification code entered was invalid
+                                Toast.makeText(getApplicationContext(), "OTP Incorrect", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+        });
+
+
         /**
          * Button to send data to the Database
          */
         finalSubmit.setOnClickListener(v -> {
-
+            // adding student object to database
+            db.collection("Requests").add(obj).addOnSuccessListener(s -> {
+                Toast.makeText(getApplicationContext(), "Request Sent", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Thank You For Helping", Toast.LENGTH_LONG).show();
+                finish();
+            }).addOnFailureListener(e -> {
+                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
+            }).addOnFailureListener(e -> {
+                Toast.makeText(getApplicationContext(), "Unable to get Url", Toast.LENGTH_LONG).show();
+            });
         });
+
     }
 
     @Override
@@ -209,10 +293,10 @@ public class Registration extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
             animalImage.setImageURI(imageUri);
-//            Bitmap bitmapImage = BitmapFactory.decodeFile(currentPhotoPath);
-//            imageUri = Util.compress(this, bitmapImage);// reducing the size of image
+            senderNameLayout.setVisibility(View.VISIBLE);
+            phoneNumberLayout.setVisibility(View.VISIBLE);
+            phoneNumberLayout.setVisibility(View.VISIBLE);
 
         }
     }
-
 }

@@ -74,8 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Hint: Dog"
-                    android:textAlignment="center"
-                    android:textColor="#8A353333" />
+                    android:textAlignment="center" />
             </LinearLayout>
 
             <LinearLayout
@@ -217,14 +216,14 @@
             <Button
                 android:id="@+id/imageCaptureBtn"
                 android:layout_width="184dp"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:layout_marginStart="100dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
                 android:backgroundTint="#A10303"
                 android:paddingBottom="4dp"
                 android:shadowRadius="@dimen/material_emphasis_high_type"
-                android:text="Click Animal Img"
+                android:text="Click Animal Image"
                 android:textSize="14sp"
                 app:cornerRadius="20dp" />
 
@@ -292,6 +291,7 @@
                 android:backgroundTint="#A10303"
                 android:paddingBottom="2dp"
                 android:text="Send OTP"
+                android:textSize="14sp"
                 app:cornerRadius="20dp" />
 
             <LinearLayout

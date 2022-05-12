@@ -10,23 +10,27 @@ public class DetailModel {
     private String animalType;
     private String gender;
     private String description;
+    private String condition;
     private String address;
     private String city;
     private String senderName;
     private String phoneNumber;
+    private String imageUri;
 
     public DetailModel() {
     }
 
-    public DetailModel(String animalType, String gender, String description,
-                       String address, String city, String senderName, String phoneNumber) {
+    public DetailModel(String animalType, String gender, String description,String condition,
+                       String address, String city, String senderName, String phoneNumber,String imageUri) {
         this.animalType = animalType;
         this.gender = gender;
         this.description = description;
+        this.condition = condition;
         this.address = address;
         this.city = city;
         this.senderName = senderName;
         this.phoneNumber = phoneNumber;
+        this.imageUri = imageUri;
     }
 
     public String getAnimalType() {
@@ -84,4 +88,21 @@ public class DetailModel {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
 }
