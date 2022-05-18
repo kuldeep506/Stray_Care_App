@@ -3,6 +3,7 @@ package com.example.straycareapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +34,13 @@ public class Dashboard extends AppCompatActivity {
 
         /** Assigning variables with input fields Ids*/
         Button registration =findViewById(R.id.registrationBtn);
+        Button donate =findViewById(R.id.contact);
+
+        donate.setOnClickListener(v -> {
+            Uri uri = Uri.parse("https://sanjanavarshney01.github.io/Stray_Care_Website");
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        });
 
 
 
@@ -55,12 +63,17 @@ public class Dashboard extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.menuAdmin:
-                Toast.makeText(getApplicationContext(),"Admin pressed",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Admin pressed", Toast.LENGTH_LONG).show();
                 break;
+            case R.id.menuSupport:
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto","strayCare@gmail.com", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+                startActivity(Intent.createChooser(emailIntent, "Send email..."));
         }
-        return true;
+                return true;
     }
 }
