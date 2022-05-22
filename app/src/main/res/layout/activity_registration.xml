@@ -213,6 +213,13 @@
                 android:paddingBottom="2dp"
                 tools:srcCompat="@tools:sample/avatars" />
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.Material.ProgressBar.Large"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_weight="1" />
+
             <Button
                 android:id="@+id/imageCaptureBtn"
                 android:layout_width="184dp"

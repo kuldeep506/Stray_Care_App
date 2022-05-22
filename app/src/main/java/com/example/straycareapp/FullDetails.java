@@ -2,13 +2,9 @@ package com.example.straycareapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +14,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
-import java.util.Calendar;
 import java.util.Objects;
 
 public class FullDetails extends AppCompatActivity {
@@ -47,19 +42,20 @@ public class FullDetails extends AppCompatActivity {
         setContentView(R.layout.activity_full_details);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
-        type = findViewById(R.id.fulDetailsID);
-        name = findViewById(R.id.fullDetailsName);
-        phone = findViewById(R.id.fullDetailsPhone);
-        Description = findViewById(R.id.fullDetailsStop);
+        type = findViewById(R.id.fulDetailstype);
+        name = findViewById(R.id.fullDetaillsName);
+        Description = findViewById(R.id.fullDetailsDescri);
 
-        address = findViewById(R.id.fullDetailsCourse);
-        city = findViewById(R.id.fullDetaillsYear);
-        name = findViewById(R.id.fullDetailsDate);
+        address = findViewById(R.id.fullDetailsAdd);
+        city = findViewById(R.id.fullDetailsCity);
+        name = findViewById(R.id.fullDetaillsName);
 
-        phone = findViewById(R.id.fullDetailsDues);
+        phone = findViewById(R.id.fullDetailsMobile);
+        condition=findViewById(R.id.fullDetailsCondition);
+        gender=findViewById(R.id.fullDetailsGender);
 
         image = findViewById(R.id.fullDetailsImage);
-        Button clearDues = findViewById(R.id.fullDetailsClearDues);
+//        Button clearDues = findViewById(R.id.fullDetailsClearDues);
 
         // retrieving ID from list cardView adapter and setting value to the full list page
         String url = getIntent().getStringExtra("imageurl");
@@ -74,17 +70,19 @@ public class FullDetails extends AppCompatActivity {
         collectionReference.whereEqualTo("imageUri", url).get().addOnCompleteListener(task -> {
             if (task.getResult() != null) {
                 for (QueryDocumentSnapshot student : task.getResult()) {
-
-                    detailModel = student.toObject(DetailModel.class);
+                    if(url.equals(student.get("imageUri"))){
+                        detailModel = student.toObject(DetailModel.class);
+                    }
                 }
                 //setting values to full details editTexts
                 type.setText(detailModel.getAnimalType());
                 name.setText(detailModel.getSenderName());
-                phone.setText(detailModel.getSenderName());
+                phone.setText(detailModel.getPhoneNumber());
                 Description.setText(detailModel.getDescription());
+                condition.setText(detailModel.getCondition());
+                gender.setText(detailModel.getGender());
                 address.setText(detailModel.getAddress());
                 city.setText(detailModel.getCity());
-                phone.setText(String.valueOf(detailModel.getPhoneNumber()));
 //                if (phone.getText().toString().equals("1700")) {
 //                    clearDues.setVisibility(View.INVISIBLE);
 //                }

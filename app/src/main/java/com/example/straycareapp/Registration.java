@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -78,6 +79,10 @@ public class Registration extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        //progress bar
+        ProgressBar progressBar=findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
 
         /** connecting to firebase different services*/
         db = FirebaseFirestore.getInstance(); // connection to Firestore
@@ -216,6 +221,8 @@ public class Registration extends AppCompatActivity {
                 auth.signInWithCredential(credential)
                         .addOnCompleteListener(this, task -> {
                             if (task.isSuccessful()) {
+                                captureImage.setVisibility(View.GONE);
+                                progressBar.setVisibility(View.VISIBLE);
                                 // Sign in success, update UI with the signed-in user's information
                                 Toast.makeText(getApplicationContext(), "OTP Verified", Toast.LENGTH_LONG).show();
                                 // Setting data from fields to object
@@ -251,6 +258,8 @@ public class Registration extends AppCompatActivity {
                                                         db.collection("Requests").add(obj).addOnSuccessListener(s -> {
                                                             Toast.makeText(getApplicationContext(), "Request Sent", Toast.LENGTH_LONG).show();
                                                             Toast.makeText(getApplicationContext(), "Thank You For Helping", Toast.LENGTH_LONG).show();
+                                                            progressBar.setVisibility(View.GONE);
+                                                            finish();
                                                         }).addOnFailureListener(e -> {
                                                             Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
                                                         }).addOnFailureListener(e -> {
@@ -261,7 +270,6 @@ public class Registration extends AppCompatActivity {
                                             e -> Toast.makeText(getApplicationContext(), "Some Error Occurred", Toast.LENGTH_LONG).show());
                                 }));
                                 // Update UI
-                                finish();
 //                                validateOTP.setVisibility(View.GONE);
 //                                enterLayout.setVisibility(View.GONE);
 //                                sendOTP.setVisibility(View.GONE);

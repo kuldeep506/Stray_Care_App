@@ -8,6 +8,7 @@ package com.example.straycareapp;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,6 @@ import java.util.ArrayList;
 
 public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.ViewHolder> {
     private final ArrayList<DetailModel> list;
-    String imageUrl;
 
     public RequestListAdapter(ArrayList<DetailModel> list) {
         this.list = list;
@@ -51,15 +51,17 @@ public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.
         holder.condition.setText(list.get(position).getCondition());
         holder.city.setText(list.get(position).getCity());
 
-        imageUrl = list.get(position).getImageUri();
+        String imageUrl=list.get(position).getImageUri();
         Picasso.get().load(imageUrl).fit() // Picasso lib to download and add image to imageview
                 .placeholder(R.drawable.ic_baseline_image_24)
                 .into(holder.Image);
+
 
         /** listener to open the full details of student*/
         holder.cardView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), FullDetails.class);
             intent.putExtra("imageurl",imageUrl);
+//            Log.d("imgi", "url: "+imageUrl);
             ContextCompat.startActivity(v.getContext(), intent, null);
         });
 

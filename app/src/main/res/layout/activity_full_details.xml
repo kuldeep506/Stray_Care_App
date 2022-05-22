@@ -32,13 +32,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
             android:fontFamily="serif"
-            android:text="ID:"
+            android:text="Type:"
             android:textColor="#0D0D0E"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/fulDetailsID"
+            android:id="@+id/fulDetailstype"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -67,7 +67,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/fullDetailsName"
+            android:id="@+id/fullDetailsGender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -96,11 +96,12 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/fullDetailsPhone"
+            android:id="@+id/fullDetailsCondition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="serif"
+            android:paddingStart="30dp"
             android:textAlignment="textEnd"
             android:textColor="@color/black"
             android:textSize="18sp" />
@@ -125,7 +126,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/fullDetailsStop"
+            android:id="@+id/fullDetailsCity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -144,7 +145,7 @@
         android:padding="5dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="106dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
             android:fontFamily="serif"
@@ -154,7 +155,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/fullDetailsCourse"
+            android:id="@+id/fullDetailsAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -184,7 +185,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/fullDetaillsYear"
+            android:id="@+id/fullDetaillsName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -213,13 +214,13 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/fullDetailsDate"
+            android:id="@+id/fullDetailsMobile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:textAlignment="textEnd"
-            android:textColor="@color/black"
+            android:textColor="#CF3C0D"
             android:textSize="18sp" />
     </LinearLayout>
 
@@ -232,7 +233,7 @@
         android:padding="5dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="146dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
             android:fontFamily="serif"
@@ -242,14 +243,14 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/fullDetailsDues"
+            android:id="@+id/fullDetailsDescri"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:inputType="textLongMessage|textMultiLine"
             android:textAlignment="textEnd"
-            android:textColor="#CF3C0D"
+            android:textColor="@color/black"
             android:textSize="18sp" />
     </LinearLayout>
 
