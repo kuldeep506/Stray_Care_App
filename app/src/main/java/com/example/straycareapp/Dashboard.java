@@ -37,13 +37,10 @@ public class Dashboard extends AppCompatActivity {
         Button donate =findViewById(R.id.contact);
 
         donate.setOnClickListener(v -> {
-            Uri uri = Uri.parse("https://sanjanavarshney01.github.io/Stray_Care_Website");
+            Uri uri = Uri.parse("https://sanjanavarshney01.github.io/Stray_Care_Website/#pricing");
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         });
-
-
-
 
         /** registration button to open registration page*/
         registration.setOnClickListener(v -> {
@@ -65,7 +62,9 @@ public class Dashboard extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuAdmin:
-                Toast.makeText(getApplicationContext(), "Admin pressed", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Admin pressed", Toast.LENGTH_LONG).show();
+                Intent intent=new Intent(getApplicationContext(),AdminLogin.class);
+                startActivity(intent);
                 break;
             case R.id.menuSupport:
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
@@ -73,6 +72,11 @@ public class Dashboard extends AppCompatActivity {
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
                 startActivity(Intent.createChooser(emailIntent, "Send email..."));
+            case R.id.aboutDev:
+                String url = "https://sanjanavarshney01.github.io/Stray_Care_Website/";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
         }
                 return true;
     }

@@ -8,6 +8,6 @@
         android:title="Support">
     </item>
     <item android:id="@+id/aboutDev"
-        android:title="About">
+        android:title="About Us">
     </item>
 </menu>

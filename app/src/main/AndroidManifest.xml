@@ -15,6 +15,7 @@
         android:roundIcon="@drawable/logonew"
         android:supportsRtl="true"
         android:theme="@style/Theme.StrayCareApp">
+        <activity android:name=".AdminLogin"></activity>
         <activity android:name=".Dashboard" />
         <activity
             android:name=".Registration"
@@ -30,6 +31,7 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.straycareapp.fileprovider"
