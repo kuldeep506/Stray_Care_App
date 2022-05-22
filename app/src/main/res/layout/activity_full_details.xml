@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gardient"
+    android:background="#E0F2F1"
     android:orientation="vertical"
     android:padding="10dp"
     tools:context=".full_details.FullDetails">
@@ -17,8 +17,7 @@
         android:fadingEdge="vertical"
         android:padding="5dp"
         android:requiresFadingEdge="horizontal"
-        android:rotation="-90"
-        app:srcCompat="@drawable/ic_baseline_account_circle_24" />
+        app:srcCompat="@drawable/ic_baseline_image_24" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -260,6 +259,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="66dp"
         android:layout_marginTop="15dp"
+        android:backgroundTint="#446026"
         android:text="Rescued" />
 
 </LinearLayout>

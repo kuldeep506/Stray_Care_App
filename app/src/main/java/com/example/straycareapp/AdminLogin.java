@@ -105,4 +105,11 @@ public class AdminLogin extends AppCompatActivity {
                     .show()).addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Some Error Occurred",Toast.LENGTH_LONG));
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent =new Intent(getApplicationContext(),Dashboard.class);
+        startActivity(intent);
+        super.onBackPressed();
+    }
 }

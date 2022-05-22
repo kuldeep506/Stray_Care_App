@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -59,6 +60,8 @@ public class RequestList extends AppCompatActivity {
                 adapter = new RequestListAdapter(list);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
             }
         }).addOnFailureListener(e -> {
             Toast.makeText(getApplicationContext(), "Failed to get List", Toast.LENGTH_LONG).show();
@@ -86,5 +89,12 @@ public class RequestList extends AppCompatActivity {
                 }
             }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show());
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent =new Intent(getApplicationContext(),AdminLogin.class);
+        startActivity(intent);
+        super.onBackPressed();
     }
 }

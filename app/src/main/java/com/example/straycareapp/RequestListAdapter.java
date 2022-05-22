@@ -53,13 +53,13 @@ public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.
 
         imageUrl = list.get(position).getImageUri();
         Picasso.get().load(imageUrl).fit() // Picasso lib to download and add image to imageview
-                .placeholder(R.drawable.logonew)
+                .placeholder(R.drawable.ic_baseline_image_24)
                 .into(holder.Image);
 
         /** listener to open the full details of student*/
         holder.cardView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), FullDetails.class);
-            intent.putExtra("id",holder.gender.getText().toString().trim());
+            intent.putExtra("imageurl",imageUrl);
             ContextCompat.startActivity(v.getContext(), intent, null);
         });
 

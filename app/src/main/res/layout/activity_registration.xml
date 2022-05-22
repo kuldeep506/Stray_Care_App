@@ -323,27 +323,15 @@
 
             <Button
                 android:id="@+id/validateOTPBtn"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="120dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:backgroundTint="#A10303"
-                android:text="Validate OTP"
-                app:cornerRadius="20dp" />
-
-            <Button
-                android:id="@+id/SubmitBtn"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="95dp"
+                android:layout_marginStart="100dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
-                android:backgroundTint="#52DD58"
+                android:backgroundTint="#6BAA29"
                 android:text="Submit"
-                android:textColor="#0E0D0D"
-                android:textSize="18sp"
-                app:cornerRadius="4dp" />
+                android:textSize="19sp"
+                app:cornerRadius="20dp" />
 
         </LinearLayout>
 

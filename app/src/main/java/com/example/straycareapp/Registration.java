@@ -1,12 +1,10 @@
 package com.example.straycareapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,7 +23,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,11 +37,11 @@ import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Registration extends AppCompatActivity {
 
@@ -89,13 +86,10 @@ public class Registration extends AppCompatActivity {
         imageStorageReference = storage.getReference();
         auth = FirebaseAuth.getInstance();
 
-        DetailModel obj=new DetailModel();
-
         /**Buttons*/
         Button captureImage = findViewById(R.id.imageCaptureBtn);
         sendOTP = findViewById(R.id.sendOTPBtn);
         validateOTP = findViewById(R.id.validateOTPBtn);
-        Button finalSubmit = findViewById(R.id.SubmitBtn);
 
         senderNameLayout = findViewById(R.id.layout1);
         phoneNumberLayout = findViewById(R.id.layout2);
@@ -137,7 +131,7 @@ public class Registration extends AppCompatActivity {
         phoneNumberLayout.setVisibility(View.INVISIBLE);
         enterLayout.setVisibility(View.INVISIBLE);
         validateOTP.setVisibility(View.GONE);
-        finalSubmit.setVisibility(View.GONE);
+
 
 
         /** Button to Capture Image*/
@@ -215,76 +209,72 @@ public class Registration extends AppCompatActivity {
 
         /** verify OTP Btn*/
         validateOTP.setOnClickListener(v -> {
-            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(OTPByFirebase, enterOTPBox.getText().toString());
-            auth.signInWithCredential(credential)
-                    .addOnCompleteListener(this, task -> {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Toast.makeText(getApplicationContext(), "OTP Verified", Toast.LENGTH_LONG).show();
-                            // Setting data from fields to object
-                            String AnimalType = animalType.getText().toString().trim();
-                            String Gender = gender.getSelectedItem().toString();
-                            String Condition = condition.getSelectedItem().toString();
-                            String Description = description.getText().toString().trim();
-                            String Address = address.getText().toString().trim();
-                            String City = city.getText().toString().trim();
-                            String SenderName=senderName.getText().toString().trim();
-                            String Phone=phoneNumber.getText().toString().trim();
+            if(TextUtils.isEmpty(enterOTPBox.getText().toString())){
+                enterOTPBox.setError("Enter OTP First");
+            }else {
+                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(OTPByFirebase, enterOTPBox.getText().toString());
+                auth.signInWithCredential(credential)
+                        .addOnCompleteListener(this, task -> {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Toast.makeText(getApplicationContext(), "OTP Verified", Toast.LENGTH_LONG).show();
+                                // Setting data from fields to object
+                                String AnimalType = animalType.getText().toString().trim();
+                                String Gender = gender.getSelectedItem().toString();
+                                String Condition = condition.getSelectedItem().toString();
+                                String Description = description.getText().toString().trim();
+                                String Address = address.getText().toString().trim();
+                                String City = city.getText().toString().trim();
+                                String SenderName = senderName.getText().toString().trim();
+                                String Phone = phoneNumber.getText().toString().trim();
 
-                            String filename = "image" + Timestamp.now().getSeconds();
-                            imageStorageReference.child("Requests")
-                                    .child(filename)
-                                    .putFile(imageUri).addOnSuccessListener((task2 -> {
-                                imageStorageReference.child("Requests").child(filename).getDownloadUrl()
-                                        .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    obj.setAnimalType(AnimalType);
-                                                    obj.setGender(Gender);
-                                                    obj.setCondition(Condition);
-                                                    obj.setDescription(Description);
-                                                    obj.setAddress(Address);
-                                                    obj.setCity(City);
-                                                    obj.setSenderName(SenderName);
-                                                    obj.setPhoneNumber(Phone);
-                                                    obj.setImageUri(imageUrl);
-                                                }
-                                        ).addOnFailureListener(
-                                        e -> Toast.makeText(getApplicationContext(),"Some Error Occurred",Toast.LENGTH_LONG).show());
-                            }));
-                            // Update UI
-                            validateOTP.setVisibility(View.GONE);
-                            enterLayout.setVisibility(View.GONE);
-                            sendOTP.setVisibility(View.GONE);
-                            finalSubmit.setVisibility(View.VISIBLE);
-                        } else {
-                            // Sign in failed, display a message and update the UI
-                            finalSubmit.setVisibility(View.GONE);
+                                DetailModel obj = new DetailModel();
+
+                                String filename = "image" + Timestamp.now().getSeconds();
+                                imageStorageReference.child("Requests")
+                                        .child(filename)
+                                        .putFile(imageUri).addOnSuccessListener((task2 -> {
+                                    imageStorageReference.child("Requests").child(filename).getDownloadUrl()
+                                            .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        obj.setAnimalType(AnimalType);
+                                                        obj.setGender(Gender);
+                                                        obj.setCondition(Condition);
+                                                        obj.setDescription(Description);
+                                                        obj.setAddress(Address);
+                                                        obj.setCity(City);
+                                                        obj.setSenderName(SenderName);
+                                                        obj.setPhoneNumber(Phone);
+                                                        obj.setImageUri(imageUrl);
+
+                                                        // sending data to database
+                                                        db.collection("Requests").add(obj).addOnSuccessListener(s -> {
+                                                            Toast.makeText(getApplicationContext(), "Request Sent", Toast.LENGTH_LONG).show();
+                                                            Toast.makeText(getApplicationContext(), "Thank You For Helping", Toast.LENGTH_LONG).show();
+                                                        }).addOnFailureListener(e -> {
+                                                            Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
+                                                        }).addOnFailureListener(e -> {
+                                                            Toast.makeText(getApplicationContext(), "Unable to get Url", Toast.LENGTH_LONG).show();
+                                                        });
+                                                    }
+                                            ).addOnFailureListener(
+                                            e -> Toast.makeText(getApplicationContext(), "Some Error Occurred", Toast.LENGTH_LONG).show());
+                                }));
+                                // Update UI
+                                finish();
+//                                validateOTP.setVisibility(View.GONE);
+//                                enterLayout.setVisibility(View.GONE);
+//                                sendOTP.setVisibility(View.GONE);
+
+                            } else {
 //                            Toast.makeText(getApplicationContext(), "Failed" + task.getException(), Toast.LENGTH_LONG).show();
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                // The verification code entered was invalid
-                                Toast.makeText(getApplicationContext(), "OTP Incorrect", Toast.LENGTH_LONG).show();
+                                if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                    // The verification code entered was invalid
+                                    Toast.makeText(getApplicationContext(), "OTP Incorrect", Toast.LENGTH_LONG).show();
+                                }
                             }
-                        }
-                    });
-        });
-
-
-        /**
-         * Button to send data to the Database
-         */
-        finalSubmit.setOnClickListener(v -> {
-            // adding student object to database
-            db.collection("Requests").add(obj).addOnSuccessListener(s -> {
-                Toast.makeText(getApplicationContext(), "Request Sent", Toast.LENGTH_LONG).show();
-                Toast.makeText(getApplicationContext(), "Thank You For Helping", Toast.LENGTH_LONG).show();
-                finish();
-            }).addOnFailureListener(e -> {
-                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
-            }).addOnFailureListener(e -> {
-                Toast.makeText(getApplicationContext(), "Unable to get Url", Toast.LENGTH_LONG).show();
-            });
-        });
-
+                        });
+            }});
     }
 
     @Override
