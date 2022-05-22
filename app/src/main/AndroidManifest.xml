@@ -15,7 +15,10 @@
         android:roundIcon="@drawable/logonew"
         android:supportsRtl="true"
         android:theme="@style/Theme.StrayCareApp">
-        <activity android:name=".AdminLogin"></activity>
+        <activity
+            android:name=".RequestList"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".AdminLogin" />
         <activity android:name=".Dashboard" />
         <activity
             android:name=".Registration"
