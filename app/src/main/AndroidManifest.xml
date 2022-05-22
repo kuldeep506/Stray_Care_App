@@ -15,6 +15,7 @@
         android:roundIcon="@drawable/logonew"
         android:supportsRtl="true"
         android:theme="@style/Theme.StrayCareApp">
+        <activity android:name=".FullDetails"></activity>
         <activity
             android:name=".RequestList"
             android:windowSoftInputMode="adjustPan" />
